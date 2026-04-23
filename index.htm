@@ -7,173 +7,508 @@
     <style>
         :root {
             --primary: #8b5cf6;
-            --bg: #0f1219;
-            --card: #151921;
+            --bg: #0a0d14;
+            --card: #111520;
             --neon-green: #00ff9d;
             --neon-blue: #4a90e2;
-            --dark-border: #242b38;
-            --text-gray: #94a3b8;
+            --dark-border: #1e2635;
+            --text-gray: #64748b;
             --gold: #fbbf24;
             --highlight: #4a90e2;
         }
 
+        * { box-sizing: border-box; }
+
         body {
             font-family: 'Segoe UI', Tahoma, sans-serif;
             background-color: var(--bg);
+            background-image:
+                radial-gradient(ellipse at 20% 20%, rgba(74,144,226,0.04) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(0,255,157,0.03) 0%, transparent 60%);
             color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 24px 20px;
             margin: 0;
+            min-height: 100vh;
         }
 
         .container { max-width: 600px; width: 100%; }
-        h1 { color: var(--neon-blue); text-align: center; text-transform: uppercase; letter-spacing: 2px; font-size: 1.8rem; margin-bottom: 30px; text-shadow: 0 0 10px var(--neon-blue); }
+
+        h1 {
+            color: var(--neon-blue);
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 1.6rem;
+            margin-bottom: 6px;
+            text-shadow: 0 0 20px rgba(74,144,226,0.6);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
 
         .card {
             background: var(--card);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            margin-bottom: 25px;
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            margin-bottom: 20px;
             border: 1px solid var(--dark-border);
+            transition: border-color 0.3s;
+        }
+        .card:hover { border-color: #2a3550; }
+
+        h2 {
+            margin-top: 0;
+            color: var(--neon-green);
+            font-size: 1.1rem;
+            border-bottom: 1px solid var(--dark-border);
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+            text-shadow: 0 0 8px rgba(0,255,157,0.4);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        h2 { margin-top: 0; color: var(--neon-green); font-size: 1.3rem; border-bottom: 1px solid var(--dark-border); padding-bottom: 10px; text-shadow: 0 0 5px var(--neon-green); }
+        h2 .badge {
+            background: rgba(0,255,157,0.1);
+            border: 1px solid rgba(0,255,157,0.2);
+            color: var(--neon-green);
+            font-size: 0.65rem;
+            padding: 2px 7px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+            font-weight: normal;
+        }
+
+        .desc {
+            font-size: 0.82rem;
+            color: var(--text-gray);
+            margin: 0 0 12px 0;
+            line-height: 1.5;
+        }
 
         textarea, input[type="text"], input[type="number"] {
             width: 100%;
-            padding: 12px;
-            background: #0a0c10;
-            color: white;
+            padding: 12px 14px;
+            background: #080b11;
+            color: #e2e8f0;
             border: 1px solid var(--dark-border);
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1rem;
-            margin-top: 10px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+            resize: vertical;
         }
-
-        .shift-input-box {
-            background: transparent; border: none; color: var(--neon-green);
-            font-family: monospace; font-size: 20px; font-weight: bold;
-            width: 50px; text-align: center; outline: none;
+        textarea:focus, input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 0 2px rgba(74,144,226,0.15);
         }
-        .shift-input-box::-webkit-inner-spin-button, 
-        .shift-input-box::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        textarea::placeholder, input::placeholder { color: #334155; }
 
         .result-box {
-            background: #0a0c10;
-            padding: 15px;
-            border-radius: 8px;
+            background: #060810;
+            padding: 14px;
+            border-radius: 10px;
             margin-top: 10px;
-            min-height: 40px;
+            min-height: 44px;
             word-break: break-all;
             font-family: 'Courier New', monospace;
-            border-left: 4px solid var(--neon-blue);
+            border-left: 3px solid var(--neon-blue);
             color: var(--neon-blue);
-            text-shadow: 0 0 5px var(--neon-blue);
+            font-size: 0.95rem;
+            text-shadow: 0 0 6px rgba(74,144,226,0.3);
+            letter-spacing: 0.5px;
         }
 
-        .challenge-box { border: 2px dashed var(--highlight); background: rgba(74, 144, 226, 0.05); display: flex; flex-direction: column; align-items: center;}
-        .task-text { font-size: 2.2rem; letter-spacing: 8px; text-align: center; margin: 15px 0; color: var(--neon-blue); text-shadow: 0 0 10px var(--neon-blue); font-weight: bold;}
+        /* ─── INSTRUCTIONS ─── */
+        .instructions-box {
+            background: rgba(74,144,226,0.05);
+            border: 1px solid rgba(74,144,226,0.15);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-        .wheel-area { position: relative; width: 340px; height: 340px; margin: 20px 0; }
-        .outer-ring-bg { width: 320px; height: 320px; border-radius: 50%; border: 2px solid var(--neon-green); position: absolute; top: 10px; left: 10px; box-shadow: 0 0 15px rgba(124, 252, 0, 0.2); }
-        .inner-ring-bg { width: 220px; height: 220px; border-radius: 50%; border: 2px solid var(--neon-green); position: absolute; top: 60px; left: 60px; background: rgba(0, 0, 0, 0.2); }
+        .inst-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.83rem;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        .inst-num {
+            background: rgba(74,144,226,0.15);
+            border: 1px solid rgba(74,144,226,0.25);
+            color: var(--neon-blue);
+            font-weight: bold;
+            font-size: 0.7rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        .inst-step strong { color: #cbd5e1; }
+
+        /* ─── KÜLDETÉS PANEL ─── */
+        .challenge-card {
+            background: linear-gradient(135deg, #0f1520 0%, #111a25 100%);
+            border: 1px solid rgba(74,144,226,0.3);
+            box-shadow: 0 0 30px rgba(74,144,226,0.08), 0 8px 32px rgba(0,0,0,0.5);
+        }
+
+        .challenge-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .challenge-title {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .task-text {
+            font-size: 2.8rem;
+            letter-spacing: 12px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 20px rgba(74,144,226,0.7);
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            margin: 4px 0 0 0;
+        }
+
+        .cipher-io {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .cipher-io-label {
+            font-size: 0.65rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-gray);
+            margin-bottom: 6px;
+        }
+
+        .cipher-io textarea {
+            height: 68px;
+            resize: none;
+        }
+
+        .cipher-io .result-box {
+            margin-top: 0;
+            min-height: 68px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Wheel */
+        .wheel-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .wheel-area { position: relative; width: 340px; height: 340px; margin: 10px 0; }
+        .outer-ring-bg { width: 320px; height: 320px; border-radius: 50%; border: 1px solid rgba(0,255,157,0.4); position: absolute; top: 10px; left: 10px; box-shadow: 0 0 20px rgba(0,255,157,0.08); }
+        .inner-ring-bg { width: 220px; height: 220px; border-radius: 50%; border: 1px solid rgba(0,255,157,0.3); position: absolute; top: 60px; left: 60px; background: rgba(0,0,0,0.2); }
         .ring { position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; }
-        .inner-ring { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .inner-ring { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
 
         .letter-slot {
-            position: absolute; width: 28px; height: 28px; background: #1a1f29; border: 1px solid #334155;
+            position: absolute; width: 26px; height: 26px; background: #131820; border: 1px solid #1e2a3a;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 13px; color: var(--neon-blue); transition: transform 0.5s;
+            font-weight: bold; font-size: 12px; color: var(--neon-blue);
         }
-        .inner-letter { color: var(--neon-green); font-size: 12px; }
+        .inner-letter { color: var(--neon-green); font-size: 11px; }
 
-        .hub { position: absolute; top: 135px; left: 135px; width: 70px; height: 70px; border-radius: 50%; border: 1px solid #334155; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #1a1f29 0%, #0f1219 100%); }
-        .hub svg { color: var(--neon-green); filter: drop-shadow(0 0 5px var(--neon-green)); }
-        .indicator-arrow { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); color: var(--neon-green); font-size: 24px; }
+        .hub { position: absolute; top: 135px; left: 135px; width: 70px; height: 70px; border-radius: 50%; border: 1px solid #1e2a3a; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle, #131820 0%, #0a0d14 100%); }
+        .hub svg { color: var(--neon-green); filter: drop-shadow(0 0 6px var(--neon-green)); }
+        .indicator-arrow { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); color: var(--neon-green); font-size: 20px; filter: drop-shadow(0 0 4px var(--neon-green)); }
 
-        .shift-display { margin-top: 20px; background: #0a0c10; border: 1px solid var(--dark-border); padding: 5px 20px; border-radius: 15px; display: flex; align-items: center; gap: 5px; }
-        input[type=range] { width: 80%; margin-top: 20px; accent-color: var(--neon-green); }
+        /* Shift controls */
+        .shift-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 12px 0;
+            width: 100%;
+            max-width: 340px;
+        }
 
-        .btn { border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; margin: 5px 0; }
-        .check-btn { background: var(--neon-green); color: black; width: 80%; margin-top: 15px; }
-        .hint-btn { background: var(--gold); color: #000; font-size: 0.8rem; padding: 8px 15px; }
-        .success { color: #4ade80; display: none; margin-top: 20px; font-weight: bold; text-align: center; }
+        .shift-label-text {
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
 
-        @media (max-width: 450px) { .wheel-area { transform: scale(0.8); margin: -30px 0; } }
+        input[type=range] {
+            flex: 1;
+            accent-color: var(--neon-green);
+            height: 4px;
+            cursor: pointer;
+        }
+
+        .shift-num {
+            background: rgba(0,255,157,0.08);
+            border: 1px solid rgba(0,255,157,0.2);
+            color: var(--neon-green);
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            width: 52px;
+            text-align: center;
+            padding: 6px 4px;
+            border-radius: 8px;
+            outline: none;
+        }
+        .shift-num:focus { border-color: var(--neon-green); box-shadow: 0 0 0 2px rgba(0,255,157,0.15); }
+        .shift-num::-webkit-inner-spin-button, .shift-num::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+        /* Solution area */
+        .solution-area {
+            width: 100%;
+            max-width: 340px;
+            margin-top: 8px;
+        }
+
+        .solution-input {
+            width: 100% !important;
+            text-align: center !important;
+            text-transform: uppercase !important;
+            font-weight: bold !important;
+            letter-spacing: 4px !important;
+            font-size: 1.1rem !important;
+            color: #fff !important;
+        }
+
+        .btn {
+            border: none;
+            padding: 11px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, var(--neon-green), #00cc7a);
+            color: #000;
+            width: 100%;
+            margin-top: 10px;
+            letter-spacing: 2px;
+        }
+        .check-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(0,255,157,0.3); }
+        .check-btn:active { transform: translateY(0); }
+
+        .hint-btn {
+            background: rgba(251,191,36,0.1);
+            border: 1px solid rgba(251,191,36,0.3);
+            color: var(--gold);
+            font-size: 0.78rem;
+            padding: 8px 16px;
+            letter-spacing: 1px;
+        }
+        .hint-btn:hover { background: rgba(251,191,36,0.15); }
+
+        .hint-text {
+            display: none;
+            color: var(--gold);
+            font-size: 0.85rem;
+            margin-top: 10px;
+            text-align: center;
+            background: rgba(251,191,36,0.06);
+            border: 1px solid rgba(251,191,36,0.15);
+            padding: 8px 14px;
+            border-radius: 8px;
+        }
+
+        .success {
+            color: #4ade80;
+            display: none;
+            margin-top: 14px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1rem;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(74,222,128,0.5);
+        }
+
+        /* Divider */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 8px 0 20px;
+        }
+        .section-divider span {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .section-divider::before, .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--dark-border);
+        }
+
+        /* Range input styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: #1e2635;
+            border-radius: 4px;
+            outline: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--neon-green);
+            cursor: pointer;
+            box-shadow: 0 0 6px rgba(0,255,157,0.5);
+        }
+
+        @media (max-width: 450px) {
+            .wheel-area { transform: scale(0.82); margin: -28px 0; }
+            .task-text { font-size: 2rem; letter-spacing: 8px; }
+            .cipher-io { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Móricz 70 Cipher</h1>
+    <p class="subtitle">Interaktív Rejtjelező</p>
 
-    <div class="card">
-        <h2>01. Caesar-rejtjel</h2>
-        <p style="font-size: 0.9rem; color: #94a3b8;">Eltolja a betűket az ábécében.</p>
-        <textarea id="cInput" rows="2">Próbáld ki itt!</textarea>
-        <div style="margin: 15px 0;">
-            Eltolás: <input type="range" id="cShiftSlider" min="0" max="25" value="3" style="width: 70%;">
-            <span id="cShiftValue" style="font-weight: bold; color: var(--neon-blue); margin-left: 10px;">3</span>
+    <!-- ═══ KÜLDETÉS - ELSŐ ═══ -->
+    <div class="card challenge-card">
+        <div class="challenge-header">
+            <span class="challenge-title">FELADAT</span>
+            <div class="task-text" id="challengeText">TVYPJG</div>
         </div>
-        <div class="result-box" id="cResult">Suredog nl lww!</div>
-    </div>
 
-    <div class="card">
-        <h2>02. Atbash (Tükrözés)</h2>
-        <p style="font-size: 0.9rem; color: var(--text-gray);">Megfordítja az ábécét.</p>
-        <textarea id="aInput" rows="2" placeholder="Írj ide...">Titkos üzenet</textarea>
-        <div class="result-box" id="aResult">Grgplh üavmvg</div>
-    </div>
+        <div class="instructions-box">
+            <div class="inst-step"><span class="inst-num">1</span><span>Másold be a fenti titkosított szöveg a bal oldali mezőbe.</span></div>
+            <div class="inst-step"><span class="inst-num">2</span><span>Forgasd
+ a Caesar-kereket az eltolás csúszkával. A jobb oldali mezőben fog 
+megjelenni a visszafejtett szöveg. Addig forgasd amíg értelmes szót nem 
+kapsz.</span></div>
+            <div class="inst-step"><span class="inst-num">3</span><span>Ha megtaláltad a megoldást, írd be a megfejtett szót a lenti mezőbe és nyomj az <strong>Ellenőrzés</strong> gombra. Ha elakadtál nyomd meg a <strong>Segítség</strong> gombot.</span></div>
+        </div>
 
-    <div class="card challenge-box">
-        <h2 style="border: none; margin-bottom: 0;"> KÜLDETÉS</h2>
-        <div class="task-text">PRULFC</div>
-
-        <div class="wheel-area">
-            <div class="indicator-arrow">▲</div>
-            <div class="outer-ring-bg"></div>
-            <div id="outerRing" class="ring"><div class="letter-slot outer-letter" style="left: 156px; top: 16px;">A</div><div class="letter-slot outer-letter" style="left: 189.504px; top: 20.0681px;">B</div><div class="letter-slot outer-letter" style="left: 221.061px; top: 32.0362px;">C</div><div class="letter-slot outer-letter" style="left: 248.837px; top: 51.2085px;">D</div><div class="letter-slot outer-letter" style="left: 271.218px; top: 76.4709px;">E</div><div class="letter-slot outer-letter" style="left: 286.902px; top: 106.355px;">F</div><div class="letter-slot outer-letter" style="left: 294.979px; top: 139.125px;">G</div><div class="letter-slot outer-letter" style="left: 294.979px; top: 172.875px;">H</div><div class="letter-slot outer-letter" style="left: 286.902px; top: 205.645px;">I</div><div class="letter-slot outer-letter" style="left: 271.218px; top: 235.529px;">J</div><div class="letter-slot outer-letter" style="left: 248.837px; top: 260.792px;">K</div><div class="letter-slot outer-letter" style="left: 221.061px; top: 279.964px;">L</div><div class="letter-slot outer-letter" style="left: 189.504px; top: 291.932px;">M</div><div class="letter-slot outer-letter" style="left: 156px; top: 296px;">N</div><div class="letter-slot outer-letter" style="left: 122.496px; top: 291.932px;">O</div><div class="letter-slot outer-letter" style="left: 90.9388px; top: 279.964px;">P</div><div class="letter-slot outer-letter" style="left: 63.1628px; top: 260.792px;">Q</div><div class="letter-slot outer-letter" style="left: 40.7823px; top: 235.529px;">R</div><div class="letter-slot outer-letter" style="left: 25.0977px; top: 205.645px;">S</div><div class="letter-slot outer-letter" style="left: 17.0208px; top: 172.875px;">T</div><div class="letter-slot outer-letter" style="left: 17.0208px; top: 139.125px;">U</div><div class="letter-slot outer-letter" style="left: 25.0977px; top: 106.355px;">V</div><div class="letter-slot outer-letter" style="left: 40.7823px; top: 76.4709px;">W</div><div class="letter-slot outer-letter" style="left: 63.1628px; top: 51.2085px;">X</div><div class="letter-slot outer-letter" style="left: 90.9388px; top: 32.0362px;">Y</div><div class="letter-slot outer-letter" style="left: 122.496px; top: 20.0681px;">Z</div><div class="letter-slot outer-letter" style="left: 156px; top: 16px;">A</div><div class="letter-slot outer-letter" style="left: 189.504px; top: 20.0681px;">B</div><div class="letter-slot outer-letter" style="left: 221.061px; top: 32.0362px;">C</div><div class="letter-slot outer-letter" style="left: 248.837px; top: 51.2085px;">D</div><div class="letter-slot outer-letter" style="left: 271.218px; top: 76.4709px;">E</div><div class="letter-slot outer-letter" style="left: 286.902px; top: 106.355px;">F</div><div class="letter-slot outer-letter" style="left: 294.979px; top: 139.125px;">G</div><div class="letter-slot outer-letter" style="left: 294.979px; top: 172.875px;">H</div><div class="letter-slot outer-letter" style="left: 286.902px; top: 205.645px;">I</div><div class="letter-slot outer-letter" style="left: 271.218px; top: 235.529px;">J</div><div class="letter-slot outer-letter" style="left: 248.837px; top: 260.792px;">K</div><div class="letter-slot outer-letter" style="left: 221.061px; top: 279.964px;">L</div><div class="letter-slot outer-letter" style="left: 189.504px; top: 291.932px;">M</div><div class="letter-slot outer-letter" style="left: 156px; top: 296px;">N</div><div class="letter-slot outer-letter" style="left: 122.496px; top: 291.932px;">O</div><div class="letter-slot outer-letter" style="left: 90.9388px; top: 279.964px;">P</div><div class="letter-slot outer-letter" style="left: 63.1628px; top: 260.792px;">Q</div><div class="letter-slot outer-letter" style="left: 40.7823px; top: 235.529px;">R</div><div class="letter-slot outer-letter" style="left: 25.0977px; top: 205.645px;">S</div><div class="letter-slot outer-letter" style="left: 17.0208px; top: 172.875px;">T</div><div class="letter-slot outer-letter" style="left: 17.0208px; top: 139.125px;">U</div><div class="letter-slot outer-letter" style="left: 25.0977px; top: 106.355px;">V</div><div class="letter-slot outer-letter" style="left: 40.7823px; top: 76.4709px;">W</div><div class="letter-slot outer-letter" style="left: 63.1628px; top: 51.2085px;">X</div><div class="letter-slot outer-letter" style="left: 90.9388px; top: 32.0362px;">Y</div><div class="letter-slot outer-letter" style="left: 122.496px; top: 20.0681px;">Z</div><div class="letter-slot outer-letter" style="left: 156px; top: 16px;">A</div><div class="letter-slot outer-letter" style="left: 189.504px; top: 20.0681px;">B</div><div class="letter-slot outer-letter" style="left: 221.061px; top: 32.0362px;">C</div><div class="letter-slot outer-letter" style="left: 248.837px; top: 51.2085px;">D</div><div class="letter-slot outer-letter" style="left: 271.218px; top: 76.4709px;">E</div><div class="letter-slot outer-letter" style="left: 286.902px; top: 106.355px;">F</div><div class="letter-slot outer-letter" style="left: 294.979px; top: 139.125px;">G</div><div class="letter-slot outer-letter" style="left: 294.979px; top: 172.875px;">H</div><div class="letter-slot outer-letter" style="left: 286.902px; top: 205.645px;">I</div><div class="letter-slot outer-letter" style="left: 271.218px; top: 235.529px;">J</div><div class="letter-slot outer-letter" style="left: 248.837px; top: 260.792px;">K</div><div class="letter-slot outer-letter" style="left: 221.061px; top: 279.964px;">L</div><div class="letter-slot outer-letter" style="left: 189.504px; top: 291.932px;">M</div><div class="letter-slot outer-letter" style="left: 156px; top: 296px;">N</div><div class="letter-slot outer-letter" style="left: 122.496px; top: 291.932px;">O</div><div class="letter-slot outer-letter" style="left: 90.9388px; top: 279.964px;">P</div><div class="letter-slot outer-letter" style="left: 63.1628px; top: 260.792px;">Q</div><div class="letter-slot outer-letter" style="left: 40.7823px; top: 235.529px;">R</div><div class="letter-slot outer-letter" style="left: 25.0977px; top: 205.645px;">S</div><div class="letter-slot outer-letter" style="left: 17.0208px; top: 172.875px;">T</div><div class="letter-slot outer-letter" style="left: 17.0208px; top: 139.125px;">U</div><div class="letter-slot outer-letter" style="left: 25.0977px; top: 106.355px;">V</div><div class="letter-slot outer-letter" style="left: 40.7823px; top: 76.4709px;">W</div><div class="letter-slot outer-letter" style="left: 63.1628px; top: 51.2085px;">X</div><div class="letter-slot outer-letter" style="left: 90.9388px; top: 32.0362px;">Y</div><div class="letter-slot outer-letter" style="left: 122.496px; top: 20.0681px;">Z</div></div>
-            <div class="inner-ring-bg"></div>
-            <div id="innerRing" class="ring inner-ring"><div class="letter-slot inner-letter" style="left: 156px; top: 66px;">A</div><div class="letter-slot inner-letter" style="left: 177.538px; top: 68.6152px;">B</div><div class="letter-slot inner-letter" style="left: 197.825px; top: 76.309px;">C</div><div class="letter-slot inner-letter" style="left: 215.681px; top: 88.634px;">D</div><div class="letter-slot inner-letter" style="left: 230.069px; top: 104.874px;">E</div><div class="letter-slot inner-letter" style="left: 240.151px; top: 124.086px;">F</div><div class="letter-slot inner-letter" style="left: 245.344px; top: 145.152px;">G</div><div class="letter-slot inner-letter" style="left: 245.344px; top: 166.848px;">H</div><div class="letter-slot inner-letter" style="left: 240.151px; top: 187.914px;">I</div><div class="letter-slot inner-letter" style="left: 230.069px; top: 207.126px;">J</div><div class="letter-slot inner-letter" style="left: 215.681px; top: 223.366px;">K</div><div class="letter-slot inner-letter" style="left: 197.825px; top: 235.691px;">L</div><div class="letter-slot inner-letter" style="left: 177.538px; top: 243.385px;">M</div><div class="letter-slot inner-letter" style="left: 156px; top: 246px;">N</div><div class="letter-slot inner-letter" style="left: 134.462px; top: 243.385px;">O</div><div class="letter-slot inner-letter" style="left: 114.175px; top: 235.691px;">P</div><div class="letter-slot inner-letter" style="left: 96.319px; top: 223.366px;">Q</div><div class="letter-slot inner-letter" style="left: 81.9315px; top: 207.126px;">R</div><div class="letter-slot inner-letter" style="left: 71.8485px; top: 187.914px;">S</div><div class="letter-slot inner-letter" style="left: 66.6562px; top: 166.848px;">T</div><div class="letter-slot inner-letter" style="left: 66.6562px; top: 145.152px;">U</div><div class="letter-slot inner-letter" style="left: 71.8485px; top: 124.086px;">V</div><div class="letter-slot inner-letter" style="left: 81.9315px; top: 104.874px;">W</div><div class="letter-slot inner-letter" style="left: 96.319px; top: 88.634px;">X</div><div class="letter-slot inner-letter" style="left: 114.175px; top: 76.309px;">Y</div><div class="letter-slot inner-letter" style="left: 134.462px; top: 68.6152px;">Z</div><div class="letter-slot inner-letter" style="left: 156px; top: 66px;">A</div><div class="letter-slot inner-letter" style="left: 177.538px; top: 68.6152px;">B</div><div class="letter-slot inner-letter" style="left: 197.825px; top: 76.309px;">C</div><div class="letter-slot inner-letter" style="left: 215.681px; top: 88.634px;">D</div><div class="letter-slot inner-letter" style="left: 230.069px; top: 104.874px;">E</div><div class="letter-slot inner-letter" style="left: 240.151px; top: 124.086px;">F</div><div class="letter-slot inner-letter" style="left: 245.344px; top: 145.152px;">G</div><div class="letter-slot inner-letter" style="left: 245.344px; top: 166.848px;">H</div><div class="letter-slot inner-letter" style="left: 240.151px; top: 187.914px;">I</div><div class="letter-slot inner-letter" style="left: 230.069px; top: 207.126px;">J</div><div class="letter-slot inner-letter" style="left: 215.681px; top: 223.366px;">K</div><div class="letter-slot inner-letter" style="left: 197.825px; top: 235.691px;">L</div><div class="letter-slot inner-letter" style="left: 177.538px; top: 243.385px;">M</div><div class="letter-slot inner-letter" style="left: 156px; top: 246px;">N</div><div class="letter-slot inner-letter" style="left: 134.462px; top: 243.385px;">O</div><div class="letter-slot inner-letter" style="left: 114.175px; top: 235.691px;">P</div><div class="letter-slot inner-letter" style="left: 96.319px; top: 223.366px;">Q</div><div class="letter-slot inner-letter" style="left: 81.9315px; top: 207.126px;">R</div><div class="letter-slot inner-letter" style="left: 71.8485px; top: 187.914px;">S</div><div class="letter-slot inner-letter" style="left: 66.6562px; top: 166.848px;">T</div><div class="letter-slot inner-letter" style="left: 66.6562px; top: 145.152px;">U</div><div class="letter-slot inner-letter" style="left: 71.8485px; top: 124.086px;">V</div><div class="letter-slot inner-letter" style="left: 81.9315px; top: 104.874px;">W</div><div class="letter-slot inner-letter" style="left: 96.319px; top: 88.634px;">X</div><div class="letter-slot inner-letter" style="left: 114.175px; top: 76.309px;">Y</div><div class="letter-slot inner-letter" style="left: 134.462px; top: 68.6152px;">Z</div><div class="letter-slot inner-letter" style="left: 156px; top: 66px;">A</div><div class="letter-slot inner-letter" style="left: 177.538px; top: 68.6152px;">B</div><div class="letter-slot inner-letter" style="left: 197.825px; top: 76.309px;">C</div><div class="letter-slot inner-letter" style="left: 215.681px; top: 88.634px;">D</div><div class="letter-slot inner-letter" style="left: 230.069px; top: 104.874px;">E</div><div class="letter-slot inner-letter" style="left: 240.151px; top: 124.086px;">F</div><div class="letter-slot inner-letter" style="left: 245.344px; top: 145.152px;">G</div><div class="letter-slot inner-letter" style="left: 245.344px; top: 166.848px;">H</div><div class="letter-slot inner-letter" style="left: 240.151px; top: 187.914px;">I</div><div class="letter-slot inner-letter" style="left: 230.069px; top: 207.126px;">J</div><div class="letter-slot inner-letter" style="left: 215.681px; top: 223.366px;">K</div><div class="letter-slot inner-letter" style="left: 197.825px; top: 235.691px;">L</div><div class="letter-slot inner-letter" style="left: 177.538px; top: 243.385px;">M</div><div class="letter-slot inner-letter" style="left: 156px; top: 246px;">N</div><div class="letter-slot inner-letter" style="left: 134.462px; top: 243.385px;">O</div><div class="letter-slot inner-letter" style="left: 114.175px; top: 235.691px;">P</div><div class="letter-slot inner-letter" style="left: 96.319px; top: 223.366px;">Q</div><div class="letter-slot inner-letter" style="left: 81.9315px; top: 207.126px;">R</div><div class="letter-slot inner-letter" style="left: 71.8485px; top: 187.914px;">S</div><div class="letter-slot inner-letter" style="left: 66.6562px; top: 166.848px;">T</div><div class="letter-slot inner-letter" style="left: 66.6562px; top: 145.152px;">U</div><div class="letter-slot inner-letter" style="left: 71.8485px; top: 124.086px;">V</div><div class="letter-slot inner-letter" style="left: 81.9315px; top: 104.874px;">W</div><div class="letter-slot inner-letter" style="left: 96.319px; top: 88.634px;">X</div><div class="letter-slot inner-letter" style="left: 114.175px; top: 76.309px;">Y</div><div class="letter-slot inner-letter" style="left: 134.462px; top: 68.6152px;">Z</div></div>
-            <div class="hub">
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        <div class="cipher-io">
+            <div>
+                <div class="cipher-io-label">Titkos üzenet</div>
+                <textarea id="challengeInput" placeholder="Írd be ide a kódot...">TVYPJG</textarea>
+            </div>
+            <div>
+                <div class="cipher-io-label">Megfejtett szöveg</div>
+                <div class="result-box" id="challengeResult" style="min-height: 68px; font-size: 1rem;">TVYPJG</div>
             </div>
         </div>
 
-        <div class="shift-display">
-            <span class="shift-label">ELTOLÁS:</span>
-            <input type="number" id="shiftValInput" class="shift-input-box" value="0" min="0" max="25" style="margin-bottom: 10px;">
+        <div class="wheel-wrapper">
+            <div class="wheel-area">
+                <div class="indicator-arrow">▲</div>
+                <div class="outer-ring-bg"></div>
+                <div id="outerRing" class="ring"><div class="letter-slot outer-letter" style="left: 157px; top: 17px;">A</div><div class="letter-slot outer-letter" style="left: 190.504px; top: 21.0681px;">B</div><div class="letter-slot outer-letter" style="left: 222.061px; top: 33.0362px;">C</div><div class="letter-slot outer-letter" style="left: 249.837px; top: 52.2085px;">D</div><div class="letter-slot outer-letter" style="left: 272.218px; top: 77.4709px;">E</div><div class="letter-slot outer-letter" style="left: 287.902px; top: 107.355px;">F</div><div class="letter-slot outer-letter" style="left: 295.979px; top: 140.125px;">G</div><div class="letter-slot outer-letter" style="left: 295.979px; top: 173.875px;">H</div><div class="letter-slot outer-letter" style="left: 287.902px; top: 206.645px;">I</div><div class="letter-slot outer-letter" style="left: 272.218px; top: 236.529px;">J</div><div class="letter-slot outer-letter" style="left: 249.837px; top: 261.792px;">K</div><div class="letter-slot outer-letter" style="left: 222.061px; top: 280.964px;">L</div><div class="letter-slot outer-letter" style="left: 190.504px; top: 292.932px;">M</div><div class="letter-slot outer-letter" style="left: 157px; top: 297px;">N</div><div class="letter-slot outer-letter" style="left: 123.496px; top: 292.932px;">O</div><div class="letter-slot outer-letter" style="left: 91.9388px; top: 280.964px;">P</div><div class="letter-slot outer-letter" style="left: 64.1628px; top: 261.792px;">Q</div><div class="letter-slot outer-letter" style="left: 41.7823px; top: 236.529px;">R</div><div class="letter-slot outer-letter" style="left: 26.0977px; top: 206.645px;">S</div><div class="letter-slot outer-letter" style="left: 18.0208px; top: 173.875px;">T</div><div class="letter-slot outer-letter" style="left: 18.0208px; top: 140.125px;">U</div><div class="letter-slot outer-letter" style="left: 26.0977px; top: 107.355px;">V</div><div class="letter-slot outer-letter" style="left: 41.7823px; top: 77.4709px;">W</div><div class="letter-slot outer-letter" style="left: 64.1628px; top: 52.2085px;">X</div><div class="letter-slot outer-letter" style="left: 91.9388px; top: 33.0362px;">Y</div><div class="letter-slot outer-letter" style="left: 123.496px; top: 21.0681px;">Z</div></div>
+                <div class="inner-ring-bg"></div>
+                <div id="innerRing" class="ring inner-ring" style="transform: rotate(-96.9231deg);"><div class="letter-slot inner-letter" style="left: 157px; top: 67px; transform: rotate(96.9231deg);">A</div><div class="letter-slot inner-letter" style="left: 178.538px; top: 69.6152px; transform: rotate(96.9231deg);">B</div><div class="letter-slot inner-letter" style="left: 198.825px; top: 77.309px; transform: rotate(96.9231deg);">C</div><div class="letter-slot inner-letter" style="left: 216.681px; top: 89.634px; transform: rotate(96.9231deg);">D</div><div class="letter-slot inner-letter" style="left: 231.069px; top: 105.874px; transform: rotate(96.9231deg);">E</div><div class="letter-slot inner-letter" style="left: 241.151px; top: 125.086px; transform: rotate(96.9231deg);">F</div><div class="letter-slot inner-letter" style="left: 246.344px; top: 146.152px; transform: rotate(96.9231deg);">G</div><div class="letter-slot inner-letter" style="left: 246.344px; top: 167.848px; transform: rotate(96.9231deg);">H</div><div class="letter-slot inner-letter" style="left: 241.151px; top: 188.914px; transform: rotate(96.9231deg);">I</div><div class="letter-slot inner-letter" style="left: 231.069px; top: 208.126px; transform: rotate(96.9231deg);">J</div><div class="letter-slot inner-letter" style="left: 216.681px; top: 224.366px; transform: rotate(96.9231deg);">K</div><div class="letter-slot inner-letter" style="left: 198.825px; top: 236.691px; transform: rotate(96.9231deg);">L</div><div class="letter-slot inner-letter" style="left: 178.538px; top: 244.385px; transform: rotate(96.9231deg);">M</div><div class="letter-slot inner-letter" style="left: 157px; top: 247px; transform: rotate(96.9231deg);">N</div><div class="letter-slot inner-letter" style="left: 135.462px; top: 244.385px; transform: rotate(96.9231deg);">O</div><div class="letter-slot inner-letter" style="left: 115.175px; top: 236.691px; transform: rotate(96.9231deg);">P</div><div class="letter-slot inner-letter" style="left: 97.319px; top: 224.366px; transform: rotate(96.9231deg);">Q</div><div class="letter-slot inner-letter" style="left: 82.9315px; top: 208.126px; transform: rotate(96.9231deg);">R</div><div class="letter-slot inner-letter" style="left: 72.8485px; top: 188.914px; transform: rotate(96.9231deg);">S</div><div class="letter-slot inner-letter" style="left: 67.6562px; top: 167.848px; transform: rotate(96.9231deg);">T</div><div class="letter-slot inner-letter" style="left: 67.6562px; top: 146.152px; transform: rotate(96.9231deg);">U</div><div class="letter-slot inner-letter" style="left: 72.8485px; top: 125.086px; transform: rotate(96.9231deg);">V</div><div class="letter-slot inner-letter" style="left: 82.9315px; top: 105.874px; transform: rotate(96.9231deg);">W</div><div class="letter-slot inner-letter" style="left: 97.319px; top: 89.634px; transform: rotate(96.9231deg);">X</div><div class="letter-slot inner-letter" style="left: 115.175px; top: 77.309px; transform: rotate(96.9231deg);">Y</div><div class="letter-slot inner-letter" style="left: 135.462px; top: 69.6152px; transform: rotate(96.9231deg);">Z</div></div>
+                <div class="hub">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                </div>
+            </div>
+
+            <div class="shift-row">
+                <span class="shift-label-text">Eltolás</span>
+                <input type="range" id="shiftSlider" min="0" max="25" value="0">
+                <input type="number" id="shiftValInput" class="shift-num" value="0" min="0" max="25">
+            </div>
+
+            <div style="text-align: center; margin-top: 4px;">
+                <button class="btn hint-btn" onclick="document.getElementById('hint').style.display='block'">💡 Segítség (Eltolás)</button>
+                <p id="hint" class="hint-text">A rendszer szerint az eltolás: 7</p>
+            </div>
         </div>
 
-        <input type="range" id="shiftSlider" min="0" max="25" value="0">
-
-        <div style="text-align: center; margin: 15px 0;">
-            <button class="btn hint-btn" onclick="document.getElementById('hint').style.display='block'">Segítség (Eltolás)</button>
-            <p id="hint" style="display:none; color: var(--gold); font-size: 0.9rem; margin-top: 10px;">A rendszer szerint az eltolás: 3</p>
+        <div class="solution-area" style="margin: 16px auto 0;">
+            <div class="cipher-io-label" style="text-align: center; margin-bottom: 8px;">✏️ A te megoldásod</div>
+            <input type="text" id="guess" class="solution-input" placeholder="MEGOLDÁS">
+            <button class="btn check-btn" onclick="check()">ELLENŐRZÉS →</button>
+            <div id="winMsg" class="success">🎉 BRAVÓ! A megoldás: MÓRICZ</div>
         </div>
-        
-        <input type="text" id="guess" placeholder="MEGOLDÁS" style="text-align: center; text-transform: uppercase; font-weight: bold; width: 80%;">
-        <button class="btn check-btn" onclick="check()">ELLENŐRZÉS</button>
-        <div id="winMsg" class="success">BRAVÓ! A megoldás: MÓRICZ</div>
+    </div>
+
+    <!-- ─── ESZKÖZÖK ─── -->
+    <div class="section-divider"><span>Eszközök</span></div>
+
+    <div class="card">
+        <h2>01. Caesar-rejtjel <span class="badge">ELTOLÁS</span></h2>
+        <p class="desc">Eltolja a betűket az ábécében az általad választott értékkel.</p>
+        <textarea id="cInput" rows="2" placeholder="Írd be a szöveget..."></textarea>
+        <div style="display: flex; align-items: center; gap: 12px; margin: 12px 0;">
+            <span class="shift-label-text">Eltolás</span>
+            <input type="range" id="cShiftSlider" min="0" max="25" value="3" style="flex: 1;">
+            <span id="cShiftValue" style="font-weight: bold; color: var(--neon-blue); font-family: monospace; font-size: 16px; min-width: 24px; text-align: center;">3</span>
+        </div>
+        <div class="result-box" id="cResult">—</div>
     </div>
 
     <div class="card">
-        <h2>04. ROT13</h2>
-        <p style="font-size: 0.8rem; color: var(--text-gray);">A Caesar speciális esete, ahol az eltolás fixen 13. Mivel 26 betű van, ugyanaz a kód titkosít és fejt meg.</p>
-        <textarea id="r13Input" rows="2" placeholder="Írj ide...">Helló Világ</textarea>
-        <div class="result-box" id="r13Result">Uryyb́ Ivyńt</div>
+        <h2>02. Atbash <span class="badge">TÜKRÖZÉS</span></h2>
+        <p class="desc">Megfordítja az ábécét: A↔Z, B↔Y, C↔X...</p>
+        <textarea id="aInput" rows="2" placeholder="Írd be a szöveget..."></textarea>
+        <div class="result-box" id="aResult">—</div>
     </div>
 
     <div class="card">
-        <h2>05. Vigenère-rejtjel</h2>
-        <p style="font-size: 0.8rem; color: var(--text-gray);">Összetett titkosítás, ahol egy kulcsszó határozza meg a betűnkénti eltolást.</p>
-        <textarea id="vInput" rows="2" placeholder="Titkosítandó szöveg...">Móricz Zsigmond</textarea>
-        <input type="text" id="vKey" placeholder="KULCSSZÓ (pl: ALMA)" style="margin-top: 10px; border-color: var(--neon-blue);">
-        <div class="result-box" id="vResult">Adj meg egy kulcsszót!</div>
+        <h2>03. ROT13 <span class="badge">CAESAR +13</span></h2>
+        <p class="desc">A Caesar speciális esete, ahol az eltolás fixen 13. Mivel 26 betű van, ugyanaz a kód titkosít és fejt meg.</p>
+        <textarea id="r13Input" rows="2" placeholder="Írd be a szöveget..."></textarea>
+        <div class="result-box" id="r13Result">—</div>
+    </div>
+
+    <div class="card">
+        <h2>04. Vigenère-rejtjel <span class="badge">KULCSSZÓ</span></h2>
+        <p class="desc">Összetett titkosítás, ahol egy kulcsszó határozza meg a betűnkénti eltolást.</p>
+        <textarea id="vInput" rows="2" placeholder="Titkosítandó szöveg..."></textarea>
+        <input type="text" id="vKey" placeholder="KULCSSZÓ (pl: ALMA)" style="margin-top: 10px;">
+        <div class="result-box" id="vResult" style="color: #334155;">Adj meg egy kulcsszót!</div>
     </div>
 
 </div>
@@ -181,7 +516,7 @@
 <script>
     const ABC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-    // Elemek
+    // ─── Elements ───
     const cInput = document.getElementById('cInput');
     const cSlider = document.getElementById('cShiftSlider');
     const cRes = document.getElementById('cResult');
@@ -202,50 +537,26 @@
     const vKey = document.getElementById('vKey');
     const vOut = document.getElementById('vResult');
 
-    // --- LOGIKA ---
+    const challengeInput = document.getElementById('challengeInput');
+    const challengeResult = document.getElementById('challengeResult');
 
+    // ─── Wheel ───
     function rotateWheel(s) {
         const ang = -s * 360 / 26;
         innerR.style.transform = `rotate(${ang}deg)`;
         innerR.querySelectorAll('.letter-slot').forEach(l => l.style.transform = `rotate(${-ang}deg)`);
     }
 
-    function applyCaesar(str, shift) {
-        return str.normalize("NFD").replace(/[a-zA-Z]/g, (c) => {
-            const base = c === c.toUpperCase() ? 65 : 97;
-            return String.fromCharCode(((c.charCodeAt(0) - base + shift) % 26) + base);
-        });
-    }
-
-    // ROT13
-    function updateROT13() {
-        r13Out.innerText = applyCaesar(r13In.value, 13);
-    }
-
-    // Vigenère
-    function updateVigenere() {
-        const text = vIn.value.toUpperCase().normalize("NFD").replace(/[^A-Z]/g, "");
-        const key = vKey.value.toUpperCase().normalize("NFD").replace(/[^A-Z]/g, "");
-        if(!key) { vOut.innerText = "Adj meg egy kulcsszót!"; return; }
-        
-        let res = "";
-        for(let i = 0; i < text.length; i++) {
-            const tCode = text.charCodeAt(i) - 65;
-            const kCode = key.charCodeAt(i % key.length) - 65;
-            res += String.fromCharCode(((tCode + kCode) % 26) + 65);
-        }
-        vOut.innerText = res;
-    }
-
-    // Init Wheel
-    function init() {
+    function initWheel() {
+        outerR.innerHTML = '';
+        innerR.innerHTML = '';
         ABC.split('').forEach((ch, i) => {
             const ang = (i * 360 / 26 - 90) * Math.PI / 180;
             const createL = (cont, r, cl) => {
                 const d = document.createElement('div');
                 d.className = `letter-slot ${cl}`;
-                d.style.left = `${170 + r * Math.cos(ang) - 14}px`;
-                d.style.top = `${170 + r * Math.sin(ang) - 14}px`;
+                d.style.left = `${170 + r * Math.cos(ang) - 13}px`;
+                d.style.top = `${170 + r * Math.sin(ang) - 13}px`;
                 d.textContent = ch;
                 cont.appendChild(d);
             };
@@ -254,19 +565,84 @@
         });
     }
 
-    // Event Listeners
-    mSlider.addEventListener('input', () => { mInput.value = mSlider.value; rotateWheel(mSlider.value); });
-    mInput.addEventListener('input', () => { 
-        let v = parseInt(mInput.value) || 0; 
-        v = Math.max(0, Math.min(25, v)); 
-        mInput.value = v; mSlider.value = v; rotateWheel(v); 
+    // ─── Caesar ───
+    function applyCaesar(str, shift) {
+        return str.normalize("NFD").replace(/[a-zA-Z]/g, (c) => {
+            const base = c === c.toUpperCase() ? 65 : 97;
+            return String.fromCharCode(((c.charCodeAt(0) - base + shift) % 26) + base);
+        });
+    }
+
+    function decodeCaesar(str, shift) {
+        return applyCaesar(str, 26 - (shift % 26));
+    }
+
+    // ─── Challenge input ───
+    function updateChallenge() {
+        const shift = parseInt(mSlider.value);
+        const text = challengeInput.value;
+        if (!text.trim()) { challengeResult.textContent = '—'; return; }
+        challengeResult.textContent = decodeCaesar(text, shift);
+    }
+
+    // ─── ROT13 ───
+    function updateROT13() {
+        const v = r13In.value;
+        r13Out.textContent = v.trim() ? applyCaesar(v, 13) : '—';
+    }
+
+    // ─── Vigenère ───
+    function updateVigenere() {
+        const text = vIn.value.toUpperCase().normalize("NFD").replace(/[^A-Z]/g, "");
+        const key = vKey.value.toUpperCase().normalize("NFD").replace(/[^A-Z]/g, "");
+        if (!key) {
+            vOut.textContent = 'Adj meg egy kulcsszót!';
+            vOut.style.color = '#334155';
+            return;
+        }
+        vOut.style.color = 'var(--neon-blue)';
+        let res = "";
+        for (let i = 0; i < text.length; i++) {
+            const tCode = text.charCodeAt(i) - 65;
+            const kCode = key.charCodeAt(i % key.length) - 65;
+            res += String.fromCharCode(((tCode + kCode) % 26) + 65);
+        }
+        vOut.textContent = res || '—';
+    }
+
+    // ─── Event listeners ───
+    mSlider.addEventListener('input', () => {
+        mInput.value = mSlider.value;
+        rotateWheel(parseInt(mSlider.value));
+        updateChallenge();
     });
-    
-    cInput.addEventListener('input', () => { cRes.innerText = applyCaesar(cInput.value, parseInt(cSlider.value)); });
-    cSlider.addEventListener('input', () => { cVal.innerText = cSlider.value; cRes.innerText = applyCaesar(cInput.value, parseInt(cSlider.value)); });
-    
+
+    mInput.addEventListener('input', () => {
+        let v = parseInt(mInput.value) || 0;
+        v = Math.max(0, Math.min(25, v));
+        mInput.value = v;
+        mSlider.value = v;
+        rotateWheel(v);
+        updateChallenge();
+    });
+
+    challengeInput.addEventListener('input', updateChallenge);
+
+    cInput.addEventListener('input', () => {
+        const v = cInput.value;
+        cRes.textContent = v.trim() ? applyCaesar(v, parseInt(cSlider.value)) : '—';
+    });
+
+    cSlider.addEventListener('input', () => {
+        cVal.textContent = cSlider.value;
+        const v = cInput.value;
+        cRes.textContent = v.trim() ? applyCaesar(v, parseInt(cSlider.value)) : '—';
+    });
+
     aInput.addEventListener('input', () => {
-        aRes.innerText = aInput.value.replace(/[a-zA-Z]/g, c => {
+        const v = aInput.value;
+        if (!v.trim()) { aRes.textContent = '—'; return; }
+        aRes.textContent = v.replace(/[a-zA-Z]/g, c => {
             const b = c <= 'Z' ? 65 : 97;
             return String.fromCharCode(b + 25 - (c.charCodeAt(0) - b));
         });
@@ -277,14 +653,28 @@
     vKey.addEventListener('input', updateVigenere);
 
     function check() {
-        if(document.getElementById('guess').value.toUpperCase().trim().includes("MORICZ")) {
+        const g = document.getElementById('guess').value.toUpperCase().trim();
+        if (g.includes("MORICZ") || g.includes("MÓRICZ")) {
             document.getElementById('winMsg').style.display = 'block';
-        } else alert("Próbáld újra!");
+        } else {
+            document.getElementById('guess').style.borderColor = '#ef4444';
+            document.getElementById('guess').style.boxShadow = '0 0 0 2px rgba(239,68,68,0.2)';
+            setTimeout(() => {
+                document.getElementById('guess').style.borderColor = '';
+                document.getElementById('guess').style.boxShadow = '';
+            }, 800);
+        }
     }
 
-    init();
-    updateROT13();
-    updateVigenere();
+    // Enter key on guess input
+    document.getElementById('guess').addEventListener('keydown', e => {
+        if (e.key === 'Enter') check();
+    });
+
+    initWheel();
+    rotateWheel(7);
+    updateChallenge();
 </script>
+
 
 </body></html>
